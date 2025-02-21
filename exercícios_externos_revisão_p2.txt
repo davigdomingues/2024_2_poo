@@ -1,0 +1,805 @@
+//Exercício 1
+import java.util.List;
+import java.util.ArrayList;
+
+public class Main{
+    public static void main(String[] args){
+        List<Animal> animais = new ArrayList<>();
+        
+        animais.add(new Cachorro());
+        animais.add(new Gato());
+        
+        for (Animal animal : animais){
+            animal.fazerSom();
+            animal.mover();
+            System.out.println();
+        }
+    }
+}
+
+abstract class Animal{
+    public abstract void mover();
+    
+    public void fazerSom(){
+        System.out.print("Animal: " + this.getClass().getSimpleName() + "\n");
+        System.out.print("Som de Animal: ");
+    }
+}
+
+public class Cachorro extends Animal{
+    @Override
+    public void mover(){
+        System.out.println("Movimentacao: Corre");
+    }
+    
+    @Override
+    public void fazerSom(){
+        super.fazerSom();
+        System.out.println("Au Au");
+    }
+}
+
+public class Gato extends Animal{
+    @Override
+    public void mover(){
+        System.out.println("Movimentacao: Anda devagar");
+    }
+    
+    @Override
+    public void fazerSom(){
+        super.fazerSom();
+        System.out.println("Miau");
+    }
+}
+
+//Exercício 2
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+	    Scanner scanner = new Scanner(System.in);
+	    
+	    System.out.println("Circulo: ");
+	    System.out.print("Raio: ");
+	    double raio = scanner.nextDouble();
+	    
+	    System.out.println();
+	    
+	    System.out.println("Retangulo: ");
+	    System.out.print("Largura: ");
+	    double largura = scanner.nextDouble();
+	    System.out.print("Altura: ");
+	    double altura = scanner.nextDouble();
+	    
+	    Circulo circulo = new Circulo(raio);
+	    Retangulo retangulo = new Retangulo(largura, altura);
+	    
+		System.out.println("Calculo das areas das figuras associadas: ");
+		System.out.println("Circulo: " + circulo.calcularArea());
+		System.out.println("Circulo: " + retangulo.calcularArea());
+		
+		scanner.close();
+	}
+}
+
+abstract class Forma{
+    public abstract double calcularArea();
+}
+
+public class Circulo extends Forma{
+    private double raio;
+    
+    public Circulo(double raio){
+        this.raio = verificarRaio(raio);
+    }
+    
+    private double verificarRaio(double raio){
+        return raio > 0 ? raio : 0;
+    }
+    
+    @Override
+    public double calcularArea(){
+        return (Math.PI * Math.pow(raio, 2));
+    }
+}
+
+public class Retangulo extends Forma{
+    private double largura, altura;
+    
+    public Retangulo(double largura, double altura){
+        this.largura = verificarLargura(largura);
+        this.altura = verificarAltura(altura);
+    }
+    
+    private double verificarLargura(double largura){
+        return largura > 0 ? largura : 0;
+    }
+    
+    private double verificarAltura(double altura){
+        return altura > 0 ? altura : 0;
+    }
+    
+    @Override
+    public double calcularArea(){
+        return (altura * largura);
+    }
+}
+
+//Exercício 3
+public class Main {
+	public static void main(String[] args) {
+	    Caixa<Integer> caixa1 = new Caixa<>();
+	    Caixa<String> caixa2 = new Caixa<>();
+	    
+	    System.out.println("Caixa Integer: ");
+	    caixa1.setItem(123);
+	    System.out.println("Conteúdo surpresa: " + caixa1.getItem());
+	    
+	    System.out.println();
+	    
+	    System.out.println("Caixa String: ");
+	    caixa2.setItem("Vai ficar tudo bem, se anime!");
+	    System.out.println("Conteúdo surpresa: " + caixa2.getItem());
+	}
+}
+
+public class Caixa<T> {
+    private T item; // não é <T> aqui!
+    
+    public void setItem(T item){ // não é <T> aqui!
+        this.item = item;
+    }
+    
+    public T getItem(){ // não é <T> aqui!
+        return item;
+    }
+}
+
+//Exercício 4
+import java.util.*;
+
+/*Ou use:
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.Collections; // Use!!
+import java.util.Map;
+import java.util.HashMap;
+*/
+
+public class Main{
+	public static void main(String[] args) throws InterruptedException {
+	    List<Pessoa> pessoas = new ArrayList<>();
+	    Scanner sc = new Scanner(System.in);
+	    int totalPessoas = 0;
+	    
+	    while (totalPessoas <= 0){
+	        System.out.print("Quantas pessoas deseja envolver na lista? ");
+	        totalPessoas = sc.nextInt();
+	        Thread.sleep(2000);
+	        
+	        if (totalPessoas <= 0)
+	            System.out.print("Por favor, coloque um numero valido\n\n");
+	    }
+	    
+	    System.out.println();
+	    
+	    for (int i = 0; i < totalPessoas; i++){
+	        System.out.println("Informacoes da pessoa " + (i+1) + ":");
+	        
+	        System.out.print("Nome: ");
+	        sc.nextLine(); // Limpa o Buffer
+	        String nome = sc.next();
+	        
+	        sc.nextLine(); // Limpa o Buffer
+	        
+	        System.out.print("Idade: ");
+	        int idade = sc.nextInt();
+	        
+	        try {
+                pessoas.add(new Pessoa(nome, idade));
+            } catch (IllegalArgumentException e) {
+                System.out.println("Erro ao adicionar pessoa: " + e.getMessage());
+                i--;  // Repetir a iteração atual para a pessoa
+            }
+	        
+	        System.out.print("Adicionando pessoa " + (i+1) + " a lista de pessoas..\n\n");
+		    Thread.sleep(2000);
+	    }
+	    
+	    Collections.sort(pessoas);
+	    System.out.println("\nPessoas ordenadas por idade:");
+	    for (Pessoa p : pessoas)
+            System.out.println(p);
+	    
+        Map<String, Pessoa> mapa = new HashMap<>();
+        for (Pessoa p : pessoas)
+            mapa.put(p.getNome(), p);
+
+        System.out.println("\nPessoas no mapa:");
+        for (Map.Entry<String, Pessoa> entry : mapa.entrySet())
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        
+        sc.close();
+    }
+}
+
+public class Pessoa implements Comparable<Pessoa> {
+    private String nome;
+    private int idade;
+    
+    public Pessoa(String nome, int idade){
+        this.nome = verificarNome(nome);
+        this.idade = verificarIdade(idade);
+    }
+    
+    private String verificarNome(String nome) {
+        if (nome == null || nome.isEmpty())
+            throw new IllegalArgumentException("Nome não pode ser vazio ou nulo.");
+        return nome;
+    }
+    
+    private int verificarIdade(int idade){
+        return idade > 0 ? idade : 0;
+    }
+    
+    @Override
+    public String toString(){
+        return nome + " - " + idade + " anos";
+    }
+    
+    @Override
+    public int compareTo(Pessoa outraPessoa) {
+        return Integer.compare(this.idade, outraPessoa.idade);  // Ordenação por idade
+    }
+    
+     // Métodos getters (caso queira acessar nome e idade externamente)
+    public String getNome() {
+        return nome;
+    }
+
+    public int getIdade() {
+        return idade;
+    }
+    
+    // Métodos setters (caso queira permitir a modificação do nome e idade)
+    public void setNome(String nome) {
+        this.nome = verificarNome(nome);
+    }
+
+    public void setIdade(int idade) {
+        this.idade = verificarIdade(idade);
+    }
+}
+
+//Exercício 5:
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+	    Scanner sc = new Scanner(System.in);
+	    List<Pagavel> funcionariosPagaveis = new ArrayList<>();
+	    
+	    System.out.println("Tipos de trabalhadores:\n");
+	    System.out.println("Funcionario:");
+	    System.out.print("Quanto ele ganha por hora trabalhada (o escravo CLT)? ");
+	    double horasTrabalhadasDoFuncionario = sc.nextDouble();
+	    
+	    System.out.println();
+	    
+	    System.out.println("Freelancer anarco-capitalista:");
+	    System.out.print("Quanto que o opressor ganha por hora? ");
+	    double salarioDoOpressor = sc.nextDouble();
+	    System.out.print("Quantas horas esse ser trabalha? ");
+	    double horasTrabalhadasDoOpressor = sc.nextDouble();
+	    
+	    funcionariosPagaveis.add(new Funcionario(horasTrabalhadasDoFuncionario));
+	    funcionariosPagaveis.add(new Freelancer(salarioDoOpressor, horasTrabalhadasDoOpressor));
+	    
+	    System.out.println();
+	    for (Pagavel pagamento : funcionariosPagaveis)
+	        System.out.println(pagamento.toString());
+	    
+	    sc.close();
+	}
+}
+
+interface Pagavel{
+    double calcularPagamento(); // não é abstract calcularPagamento() !
+}
+
+public class Funcionario implements Pagavel{
+    private double salarioFixoPorHora;
+    
+    public Funcionario(double salarioFixoPorHora){
+        this.salarioFixoPorHora = salarioFixoPorHora > 0 ? salarioFixoPorHora : 0;
+    }
+    
+    @Override
+    public double calcularPagamento(){
+        return salarioFixoPorHora * 8;
+    }
+    
+    public String toString(){
+        return "Funcionario - Salario: " + calcularPagamento() + "\n";
+    }
+}
+
+public class Freelancer implements Pagavel {
+    private double valorHora;
+    private double horasTrabalhadas;
+    
+    public Freelancer(double valorHora, double horasTrabalhadas){
+        this.valorHora = valorHora > 0 ? valorHora : 0;
+        this.horasTrabalhadas = horasTrabalhadas > 0 ? horasTrabalhadas : 0;
+    }
+    
+    @Override
+    public double calcularPagamento(){
+        return (valorHora * horasTrabalhadas);
+    }
+    
+    public String toString(){
+        return "Freelancer - Salario: " + calcularPagamento() + "\n";
+    }
+}
+
+
+//Exercício 6
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+	    ArrayList<String> listaNomesArray = new ArrayList<>();
+	    Scanner scanner = new Scanner(System.in);
+	    
+	    int opcao;
+	    String nomeAdicionar, nomeRemover, nomeBuscado;
+	    
+	    do{
+	        System.out.println("(1) Adicionar nomes na lista");
+	        System.out.println("(2) Imprimir todos os nomes da lista");
+	        System.out.println("(3) Remover nome lista");
+	        System.out.println("(4) Verificar se um nome esta na lista");
+	        System.out.println("(5) Sair");
+	        opcao = scanner.nextInt();
+	        scanner.nextLine();
+	        
+	        switch(opcao){
+	            case 1:
+	                System.out.print("Qual nome deseja adicionar na lista? ");
+	                nomeAdicionar = scanner.nextLine();
+	                listaNomesArray.add(nomeAdicionar);
+	                break;
+	                
+	            case 2:
+	                System.out.println("Lista atual de nomes:");
+	                for (String nome : listaNomesArray)
+	                    System.out.println(nome);
+	                break;
+	                
+	            case 3:
+	                System.out.print("Qual nome deseja remover na lista? ");
+	                nomeRemover = scanner.nextLine();
+	                listaNomesArray.remove(nomeRemover);
+	                break;
+	                
+	            case 4:
+	                System.out.print("Qual nome deseja procurar na lista? ");
+	                nomeBuscado = scanner.nextLine();
+	                
+	                if (listaNomesArray.contains(nomeBuscado)){
+	                    System.out.println("O nome " + nomeBuscado + " esta na lista, na posicao " + listaNomesArray.indexOf(nomeBuscado));
+	                    
+	                    System.out.println("Nomes após a remoção:");
+                        Iterator<String> iterator = listaNomesArray.iterator();
+                    
+                        while (iterator.hasNext())
+                            System.out.println(iterator.next());
+	                }
+	                    
+	                else 
+	                    System.out.println("O nome " + nomeBuscado + " nao esta na lista");
+	                    
+	                break;
+	                
+	            case 5:
+	                System.out.println("Saindo...");
+	                break;
+	        }
+	        
+	    } while (opcao != 5);
+		
+		scanner.close();
+	}
+}
+
+
+//Exercício 7
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Main {
+    private static Scanner scanner = new Scanner(System.in);
+    private static HashMap<String, Double> alunoNotas = new HashMap<>();
+    
+    public static void main(String[] args) {
+        int opcao;
+        double notaAdicionar, notaNovaAdicionar;
+        String nomeAdicionar, nomeRemover, nomeBuscado, nomeABuscar, nomeAlterar;
+        
+        do {
+            System.out.println("(1) Adicionar alunos na lista de notas");
+            System.out.println("(2) Imprimir o nome dos alunos presentes na lista e sua respectiva nota");
+            System.out.println("(3) Alterar a nota de um aluno presente na lista");
+            System.out.println("(4) Verificar se um aluno está na lista");
+            System.out.println("(5) Sair");
+            opcao = scanner.nextInt();
+            scanner.nextLine();  // Limpar o buffer após nextInt()
+            
+            switch (opcao) {
+                case 1:
+                    System.out.print("Nome do aluno: ");
+                    nomeAdicionar = scanner.nextLine();
+                    System.out.print("Nota do aluno: ");
+                    notaAdicionar = scanner.nextDouble();
+                    alunoNotas.put(nomeAdicionar, notaAdicionar);
+                    System.out.println("Valores inseridos com sucesso!");
+                    break;
+                
+                case 2:
+                    System.out.print("Qual nome do aluno deseja procurar? ");
+                    nomeABuscar = scanner.nextLine();
+                    boolean achou = false;
+                    
+                    for (Map.Entry<String, Double> entrada : alunoNotas.entrySet()) {
+                        if (entrada.getKey().equals(nomeABuscar)) {
+                            System.out.println("Aluno: " + entrada.getKey() + " | Nota: " + entrada.getValue());
+                            achou = true;
+                        }
+                    }
+                    
+                    if (!achou) {
+                        System.out.println("Aluno não encontrado...");
+                    }
+                    break;
+                
+                case 3:
+                    System.out.print("Nome do aluno: ");
+                    nomeAlterar = scanner.nextLine();
+                    System.out.print("Nova nota do aluno: ");
+                    notaNovaAdicionar = scanner.nextDouble();
+                    alunoNotas.put(nomeAlterar, notaNovaAdicionar);  // Alterar nota usando put
+                    System.out.println("Nota atualizada com sucesso!");
+                    break;
+                
+                case 4:
+                    System.out.print("Qual nome deseja procurar na lista? ");
+                    nomeBuscado = scanner.nextLine();
+                    
+                    if (alunoNotas.containsKey(nomeBuscado))
+                        System.out.println("O nome " + nomeBuscado + " está na lista.");
+                    
+					else
+                        System.out.println("O nome " + nomeBuscado + " não está na lista.");
+						
+                    break;
+                
+                case 5:
+                    System.out.println("Saindo...");
+                    break;
+                
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+                    break;
+            }
+            
+        } while (opcao != 5);
+        
+        scanner.close();
+    }
+}
+
+//Exercício 8:
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+	    Scanner sc = new Scanner(System.in);
+	    List<Integer> listaInteiros = new ArrayList<>();
+	    
+	    System.out.print("Quantos numeros deseja inserir? ");
+	    int totalNumeros = sc.nextInt();
+	    
+	    for (int i = 0; i < totalNumeros; i++){
+	        System.out.print("Numero " + (i+1) + ": ");
+	        int numero = sc.nextInt();
+	        listaInteiros.add(numero);
+	    }
+	    
+	    Collections.sort(listaInteiros);
+	    
+		System.out.println("Lista de inteiros ordenada:");
+		for (Integer resultado : listaInteiros)
+		    System.out.print(resultado + " ");
+		    
+		sc.close();
+	}
+}
+
+//Exercício 9:
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+	    Scanner sc = new Scanner(System.in);
+	    LinkedHashSet<Integer> listaInteirosSemDuplicatas = new LinkedHashSet<Integer>();
+	    
+	    System.out.print("Quantos numeros deseja inserir? ");
+	    int totalNumeros = sc.nextInt();
+	    
+	    for (int i = 0; i < totalNumeros; i++){
+	        System.out.print("Numero " + (i+1) + ": ");
+	        int numero = sc.nextInt();
+	        listaInteirosSemDuplicatas.add(numero);
+	    }
+	    
+	    List<Integer> listaInteiros = new ArrayList<Integer>(listaInteirosSemDuplicatas);
+	    Collections.sort(listaInteiros);
+	    
+		System.out.println("Lista de inteiros ordenada e sem duplicatas:");
+		for (Integer resultado : listaInteiros)
+		    System.out.print(resultado + " ");
+		    
+		sc.close();
+	}
+}
+
+//Exercício 10:
+import java.util.Scanner;
+import java.util.HashSet;
+import java.util.Set;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		Set<Integer> conjunto1 = new HashSet<>();
+		Set<Integer> conjunto2 = new HashSet<>();
+
+		System.out.print("Quantos numeros deseja inserir no set 1? ");
+		int totalNumeros1 = sc.nextInt();
+
+		for (int i = 0; i < totalNumeros1; i++) {
+			System.out.print("Numero " + (i+1) + ": ");
+			int numero = sc.nextInt();
+			conjunto1.add(numero);
+		}
+
+		System.out.print("\nQuantos numeros deseja inserir no set 2? ");
+		int totalNumeros2 = sc.nextInt();
+
+		for (int i = 0; i < totalNumeros2; i++) {
+			System.out.print("Numero " + (i+1) + ": ");
+			int numero = sc.nextInt();
+			conjunto2.add(numero);
+		}
+
+		Set<Integer> uniao = new HashSet<>(conjunto1);
+		Set<Integer> interseccao = new HashSet<>(conjunto1);
+
+		uniao.addAll(conjunto2);
+		interseccao.retainAll(conjunto2);
+
+		System.out.println("\nUniao " + uniao);
+		System.out.println("Interseccao " + interseccao);
+
+		sc.close();
+	}
+}
+
+//Exercício 11:
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Map<String, Integer> contagemPalavras = new HashMap<>();
+        
+        System.out.println("Digite um texto qualquer:");
+        String texto = sc.nextLine();
+
+        // Divide o texto em palavras
+        String[] palavrasCapturadas = texto.split("\\s+");
+        
+        // Conta a ocorrência de cada palavra
+        for (String palavra : palavrasCapturadas) {
+            // Remove pontuações (caso haja) e converte para minúsculas
+            palavra = palavra.replaceAll("[^a-zA-ZáàãâäåéèêëíìîïóòôöúùûüçÇ]", "").toLowerCase();
+            
+            // Se a palavra já estiver no Map, incrementa a contagem
+            contagemPalavras.put(palavra, contagemPalavras.getOrDefault(palavra, 0) + 1);
+        }
+        
+        // Convertendo o Map para uma lista de entradas (Map.Entry)
+        List<Map.Entry<String, Integer>> listaContagem = new ArrayList<>(contagemPalavras.entrySet());
+
+        // Ordenar a lista de palavras primeiro por contagem e depois por palavra
+        Collections.sort(listaContagem, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> entry1, Map.Entry<String, Integer> entry2) {
+                // Ordenar primeiro por contagem (decrescente)
+                int cmp = entry2.getValue().compareTo(entry1.getValue());
+                if (cmp == 0) {
+                    // Se as contagens forem iguais, ordenar por palavra (alfabeticamente)
+                    return entry1.getKey().compareTo(entry2.getKey());
+                }
+                return cmp;
+            }
+        });
+        
+        // Exibindo as contagens personalizadas
+        System.out.println("\nContagem de palavras:");
+        for (Map.Entry<String, Integer> entry : listaContagem) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+        
+        sc.close();
+    }
+}
+
+//Exercício 12:
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+	    Queue<String> filaDeImpressao = new LinkedList<>();
+	    Scanner sc = new Scanner(System.in);
+	    
+		System.out.print("Quantas tarefas deseja adicionar a fila? ");
+		int limite = sc.nextInt();
+		sc.nextLine();
+		
+		System.out.println("");
+		for (int i = 0; i < limite; i++){
+		    System.out.print("Tarefa " + (i+1) + ": ");
+		    String tarefa = sc.nextLine();
+		    filaDeImpressao.add(tarefa);
+		}
+		
+		System.out.println("\nQueue final gerada:");
+		for (String tarefasEmOrdem : filaDeImpressao)
+		    System.out.println(tarefasEmOrdem);
+	}
+}
+
+//Exercício 13:
+import java.util.Stack;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Escreva qualquer expressão matemática: ");
+        String expressao = sc.nextLine();
+        
+        String resultado = verificarBalanceamento(expressao) ? "Sim" : "Nao";
+        System.out.println("Expressão válida: " + resultado);
+    }
+    
+    public static boolean verificarBalanceamento(String expressao) {
+        Stack<Character> pilha = new Stack<>();
+        
+        // Percorrer a expressão caractere por caractere
+        for (char c : expressao.toCharArray()) {
+            // Se o caractere for um dos tipos de parênteses de abertura, empilha
+            if (c == '(' || c == '{' || c == '[') {
+                pilha.push(c);
+            } 
+            // Se for um parêntese de fechamento
+            else if (c == ')' || c == '}' || c == ']') {
+                if (pilha.isEmpty()) {
+                    return false; // Não há parêntese de abertura correspondente
+                }
+                
+                // Verifica se o topo da pilha corresponde ao tipo correto de parêntese
+                char topo = pilha.pop();
+                if ((c == ')' && topo != '(') ||
+                    (c == '}' && topo != '{') ||
+                    (c == ']' && topo != '[')) {
+                    return false; // Parênteses desbalanceados
+                }
+            }
+        }
+        
+        // Se a pilha estiver vazia no final, todos os parênteses foram balanceados
+        return pilha.isEmpty();
+    }
+}
+
+
+//Exercício 13:
+//Resposta para a questão 4 da P1 de POO:
+import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        // Dados de exemplo fornecidos
+        List<Integer> numeros = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.print("Total de elementos a serem declarados: ");
+        int limite = scanner.nextInt();
+        System.out.println();
+        
+        // Coletando os valores fornecidos
+        for (int i = 0; i < limite; i++){
+            System.out.print("Valor " + (i+1) + ": ");
+            int x = scanner.nextInt();
+            numeros.add(x);
+        }
+        
+        // Usar um Set para garantir que os elementos sejam únicos (não mantém ordem)
+        Set<Integer> elementosUnicos = new HashSet<>(numeros);
+        
+        // Lista de frequências
+        List<Integer> frequencias = new ArrayList<>();
+
+        // Contar as frequências de cada elemento único
+        for (Integer elem : elementosUnicos) {
+            int count = 0;
+            for (Integer n : numeros) {
+                if (n.equals(elem))
+                    count++;
+            }
+            
+            frequencias.add(count);
+        }
+
+        // Criando a lista bidimensional (2 listas internas)
+        List<List<Integer>> listaBidimensional = new ArrayList<>();
+
+        // Adicionar elementos e suas frequências na lista bidimensional
+        List<Integer> elementosList = new ArrayList<>(elementosUnicos);
+        listaBidimensional.add(elementosList); // Primeira dimensão (elementos)
+        listaBidimensional.add(frequencias);   // Segunda dimensão (frequências)
+
+        // Exibindo a matriz resultante
+        System.out.println("\nMatriz Bidimensional (Elementos e Frequências):\n");
+
+        // Usando enhanced for
+        List<Integer> elementos = listaBidimensional.get(0);
+        List<Integer> frequencias = listaBidimensional.get(1);
+
+        for (int i = 0; i < elementos.size(); i++) {
+            Integer elemento = elementos.get(i);
+            Integer frequencia = frequencias.get(i);
+            System.out.println("Elemento: " + elemento + " | Frequência: " + frequencia);
+        }
+
+        scanner.close();
+    }
+}
