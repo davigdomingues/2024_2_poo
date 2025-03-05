@@ -158,11 +158,11 @@ public class Caixa<T> {
 //Exercício 4
 import java.util.*;
 
-/*Ou use:
+/*Equivalente para o exercício:
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Collections; // Use!!
+import java.util.Collections; // Importante!!
 import java.util.Map;
 import java.util.HashMap;
 */
