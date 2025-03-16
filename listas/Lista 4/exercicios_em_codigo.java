@@ -1,4 +1,4 @@
-//(exercício 3)
+//(exercício 3 gabarito esperado)
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
